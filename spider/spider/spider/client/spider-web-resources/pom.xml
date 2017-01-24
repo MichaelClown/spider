@@ -5,8 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.spider</groupId>
-    <artifactId>spider-web</artifactId>
+    <artifactId>spider-web-resources</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <description>web-resources</description>
+    <packaging>war</packaging>
+
+    <parent>
+        <groupId>com.spider</groupId>
+        <artifactId>spider-client-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
 
 </project>
