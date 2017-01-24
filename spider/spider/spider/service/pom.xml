@@ -12,6 +12,7 @@
     <parent>
         <groupId>com.spider</groupId>
         <artifactId>spider-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <build>
