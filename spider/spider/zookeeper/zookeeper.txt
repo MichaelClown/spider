@@ -1,0 +1,17 @@
+
+create /com/spider/cfg/1.0.0/common/rabbitmq
+create /com/spider/cfg/1.0.0/common/database
+create /com/spider/cfg/1.0.0/logistics/spider
+
+<!-- rabbitmq相关配置 -->
+create /com/spider/cfg/1.0.0/common/rabbitmq/address
+create /com/spider/cfg/1.0.0/common/rabbitmq/port
+create /com/spider/cfg/1.0.0/common/rabbitmq/host
+create /com/spider/cfg/1.0.0/common/rabbitmq/username
+create /com/spider/cfg/1.0.0/common/rabbitmq/password
+
+<!-- database相关配置 -->
+create /com/spider/cfg/1.0.0/common/database/address
+create /com/spider/cfg/1.0.0/common/database/username
+create /com/spider/cfg/1.0.0/common/database/password
+create /com/spider/cfg/1.0.0/common/database/driver
