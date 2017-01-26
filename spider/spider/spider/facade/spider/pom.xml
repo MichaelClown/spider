@@ -17,18 +17,19 @@
 
     <dependencies>
 
+        <!-- client依赖 -->
         <dependency>
             <groupId>com.spider</groupId>
             <artifactId>spider-web-resources</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
-
         <dependency>
             <groupId>com.spider</groupId>
             <artifactId>spider-lib</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
 
     </dependencies>
 
