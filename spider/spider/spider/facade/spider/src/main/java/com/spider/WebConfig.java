@@ -1,6 +1,7 @@
 package com.spider;
 
 import com.spider.common.zookeeper.client.ZookeeperClient;
+import com.spider.common.zookeeper.constant.ZKNameSpaceEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,8 +18,8 @@ public class WebConfig {
     @Bean
     public ZookeeperClient zookeeperClient() {
         ZookeeperClient zookeeperClient = new ZookeeperClient(zkAddress, zkNameSpace);
-        zookeeperClient.interator("rabbitmq", "/common/rabbitmq");
-        zookeeperClient.interator("database", "/common/database");
+        zookeeperClient.interator(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), ZKNameSpaceEnum.RABBITMQ.getZkPath());
+        zookeeperClient.interator(ZKNameSpaceEnum.DATABASE.getNameSpace(), ZKNameSpaceEnum.DATABASE.getZkPath());
         return zookeeperClient;
     }
 
