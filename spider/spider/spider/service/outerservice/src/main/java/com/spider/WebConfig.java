@@ -2,7 +2,7 @@ package com.spider;
 
 import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.constant.ZKNameSpaceEnum;
-import com.spider.integrate.amqp.constant.QueueNameEnum;
+import com.spider.common.amqp.constant.QueueNameEnum;
 import com.spider.integrate.amqp.handler.TestMessageHandler;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.AmqpTemplate;
