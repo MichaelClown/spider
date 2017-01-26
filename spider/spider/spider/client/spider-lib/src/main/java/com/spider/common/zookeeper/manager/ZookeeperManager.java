@@ -19,7 +19,6 @@ public class ZookeeperManager implements IzookeeperManager {
         curatorFramework = CuratorFrameworkFactory
                 .builder()
                 .connectString(zkAddress)
-                .namespace(zkNameSpace)
                 .sessionTimeoutMs(sessionTimeOut)
                 .connectionTimeoutMs(connectTimeOut)
                 .retryPolicy(new RetryNTimes(2147483647, 1000))

@@ -1,7 +1,7 @@
 
 create /com/spider/cfg/1.0.0/common/rabbitmq
 create /com/spider/cfg/1.0.0/common/database
-create /com/spider/cfg/1.0.0/logistics/spider
+create /com/spider/cfg/1.0.0/logistics/queue
 
 <!-- rabbitmq相关配置 -->
 create /com/spider/cfg/1.0.0/common/rabbitmq/address
@@ -15,3 +15,6 @@ create /com/spider/cfg/1.0.0/common/database/address
 create /com/spider/cfg/1.0.0/common/database/username
 create /com/spider/cfg/1.0.0/common/database/password
 create /com/spider/cfg/1.0.0/common/database/driver
+
+<!-- rabbitmq队列 -->
+create /com/spider/cfg/1.0.0/logistics/queue/spider-queue-test spider.queue.test
