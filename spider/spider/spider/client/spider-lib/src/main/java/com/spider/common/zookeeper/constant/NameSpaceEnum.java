@@ -3,13 +3,13 @@ package com.spider.common.zookeeper.constant;
 /**
  * Created by jian.Michael on 2017/1/26.
  */
-public enum  ZKNameSpaceEnum {
+public enum NameSpaceEnum {
 
     RABBITMQ("rabbitmq", "/common/rabbitmq"),
     DATABASE("database", "/common/database"),
     QUEUE("queue", "/logistics/queue");
 
-    private ZKNameSpaceEnum(String nameSpace, String zkPath) {
+    private NameSpaceEnum(String nameSpace, String zkPath) {
         this.nameSpace = nameSpace;
         this.zkPath = zkPath;
     }

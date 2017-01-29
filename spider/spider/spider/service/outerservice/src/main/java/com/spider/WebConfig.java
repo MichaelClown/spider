@@ -1,7 +1,7 @@
 package com.spider;
 
 import com.spider.common.zookeeper.client.ZookeeperClient;
-import com.spider.common.zookeeper.constant.ZKNameSpaceEnum;
+import com.spider.common.zookeeper.constant.NameSpaceEnum;
 import com.spider.common.amqp.constant.QueueNameEnum;
 import com.spider.integrate.amqp.handler.TestMessageHandler;
 import org.springframework.amqp.core.AcknowledgeMode;
@@ -30,9 +30,9 @@ public class WebConfig {
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     public ZookeeperClient zookeeperClient() {
         ZookeeperClient zookeeperClient = new ZookeeperClient(zkAddress, zkNameSpace);
-        zookeeperClient.interator(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), ZKNameSpaceEnum.RABBITMQ.getZkPath());
-        zookeeperClient.interator(ZKNameSpaceEnum.DATABASE.getNameSpace(), ZKNameSpaceEnum.DATABASE.getZkPath());
-        zookeeperClient.interator(ZKNameSpaceEnum.QUEUE.getNameSpace(), ZKNameSpaceEnum.QUEUE.getZkPath());
+        zookeeperClient.iterator(NameSpaceEnum.RABBITMQ.getNameSpace(), NameSpaceEnum.RABBITMQ.getZkPath());
+        zookeeperClient.iterator(NameSpaceEnum.DATABASE.getNameSpace(), NameSpaceEnum.DATABASE.getZkPath());
+        zookeeperClient.iterator(NameSpaceEnum.QUEUE.getNameSpace(), NameSpaceEnum.QUEUE.getZkPath());
         return zookeeperClient;
     }
 
@@ -41,11 +41,11 @@ public class WebConfig {
     public ConnectionFactory connectionFactory() {
         ZookeeperClient zkClient = zookeeperClient();
         CachingConnectionFactory factory = new CachingConnectionFactory();
-        factory.setAddresses(zkClient.get(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/address"));
-        factory.setPort(Integer.parseInt(zkClient.get(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/port")));
-        factory.setVirtualHost(zkClient.get(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/vhosts"));
-        factory.setUsername(zkClient.get(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/username"));
-        factory.setPassword(zkClient.get(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/password"));
+        factory.setAddresses(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/address"));
+        factory.setPort(Integer.parseInt(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/port")));
+        factory.setVirtualHost(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/vhosts"));
+        factory.setUsername(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/username"));
+        factory.setPassword(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/password"));
         return factory;
     }
 
@@ -58,7 +58,7 @@ public class WebConfig {
     @Qualifier("testMessageListenerContainer")
     public SimpleMessageListenerContainer testMessageListenerContainer() {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        String queueName = getZKValue(ZKNameSpaceEnum.QUEUE.getNameSpace(), QueueNameEnum.TEST_QUEUE.getQueueZkPath(), QueueNameEnum.TEST_QUEUE.getDefaultQueueName());
+        String queueName = getZKValue(NameSpaceEnum.QUEUE.getNameSpace(), QueueNameEnum.TEST_QUEUE.getQueueZkPath(), QueueNameEnum.TEST_QUEUE.getDefaultQueueName());
         container.setConnectionFactory(connectionFactory());
         container.setQueueNames(queueName);
         container.setMessageListener(testMessageHandler());

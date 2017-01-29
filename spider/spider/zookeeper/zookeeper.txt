@@ -2,6 +2,7 @@
 create /com/spider/cfg/1.0.0/common/rabbitmq
 create /com/spider/cfg/1.0.0/common/database
 create /com/spider/cfg/1.0.0/logistics/queue
+create /com/spider/cfg/1.0.0/service
 
 <!-- rabbitmq相关配置 -->
 create /com/spider/cfg/1.0.0/common/rabbitmq/address
