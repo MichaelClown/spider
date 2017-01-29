@@ -4,6 +4,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryNTimes;
 import org.apache.zookeeper.CreateMode;
+import com.spider.common.zookeeper.manager.AbstractZookeeperFeature.IZookeeperManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -11,9 +12,10 @@ import java.util.List;
 /**
  * Created by jian.Michael on 2017/1/25.
  */
-public class ZookeeperManager implements IzookeeperManager {
+public class ZookeeperManager implements IZookeeperManager {
 
     private CuratorFramework curatorFramework;
+
 
     public ZookeeperManager(String zkAddress, String zkNameSpace, int sessionTimeOut, int connectTimeOut) {
         curatorFramework = CuratorFrameworkFactory
@@ -121,6 +123,7 @@ public class ZookeeperManager implements IzookeeperManager {
         }
     }
 
+    @Override
     public List<String> getChildrenNode(String path) {
         try {
             return this.curatorFramework.getChildren().forPath(path);

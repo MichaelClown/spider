@@ -1,7 +1,7 @@
 package com.spider;
 
 import com.spider.common.zookeeper.client.ZookeeperClient;
-import com.spider.common.zookeeper.constant.ZKNameSpaceEnum;
+import com.spider.common.zookeeper.constant.NameSpaceEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,15 +11,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebConfig {
 
-    private final String zkAddress = "192.168.1.3:2181";
+    private final String zkAddress = "192.168.1.6:2181";
     private final String zkNameSpace = "/com/spider/cfg/1.0.0";
 
 
     @Bean
     public ZookeeperClient zookeeperClient() {
         ZookeeperClient zookeeperClient = new ZookeeperClient(zkAddress, zkNameSpace);
-        zookeeperClient.interator(ZKNameSpaceEnum.RABBITMQ.getNameSpace(), ZKNameSpaceEnum.RABBITMQ.getZkPath());
-        zookeeperClient.interator(ZKNameSpaceEnum.DATABASE.getNameSpace(), ZKNameSpaceEnum.DATABASE.getZkPath());
+        zookeeperClient.iterator(NameSpaceEnum.RABBITMQ.getNameSpace(), NameSpaceEnum.RABBITMQ.getZkPath());
+        zookeeperClient.iterator(NameSpaceEnum.DATABASE.getNameSpace(), NameSpaceEnum.DATABASE.getZkPath());
         return zookeeperClient;
     }
 

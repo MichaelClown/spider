@@ -1,4 +1,4 @@
-package com.spider.common.zookeeper.manager;
+package com.spider.common.zookeeper.config;
 
 import org.springframework.util.StringUtils;
 
