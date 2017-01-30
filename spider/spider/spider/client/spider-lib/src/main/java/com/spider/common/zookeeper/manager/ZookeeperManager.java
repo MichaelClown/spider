@@ -2,12 +2,19 @@ package com.spider.common.zookeeper.manager;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.framework.state.ConnectionState;
+import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.curator.retry.RetryNTimes;
 import org.apache.zookeeper.CreateMode;
 import com.spider.common.zookeeper.manager.AbstractZookeeperFeature.IZookeeperManager;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by jian.Michael on 2017/1/25.
@@ -15,9 +22,12 @@ import java.util.List;
 public class ZookeeperManager implements IZookeeperManager {
 
     private CuratorFramework curatorFramework;
+    private ConnectionStateListener connectionStateListener;
+    private final Map<String, ConnectionStateListener> stateListenerMap;
 
 
     public ZookeeperManager(String zkAddress, String zkNameSpace, int sessionTimeOut, int connectTimeOut) {
+        this.stateListenerMap = new ConcurrentHashMap<>();
         curatorFramework = CuratorFrameworkFactory
                 .builder()
                 .connectString(zkAddress)
@@ -25,6 +35,8 @@ public class ZookeeperManager implements IZookeeperManager {
                 .connectionTimeoutMs(connectTimeOut)
                 .retryPolicy(new RetryNTimes(2147483647, 1000))
                 .build();
+        connectionStateListener = new ClientServiceStateListener();
+        curatorFramework.getConnectionStateListenable().addListener(connectionStateListener);
         try {
             curatorFramework.start();
             curatorFramework.blockUntilConnected();
@@ -134,7 +146,38 @@ public class ZookeeperManager implements IZookeeperManager {
     }
 
     @Override
+    public void addPathChildrenListener(String path, PathChildrenCacheListener pathChildrenCacheListener) {
+        try {
+            PathChildrenCache childrenCache = new PathChildrenCache(curatorFramework, path, true);
+            childrenCache.getListenable().addListener(pathChildrenCacheListener);
+            childrenCache.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void close() {
 
     }
+
+    @Override
+    public void addServiceStateListener(String var1, ConnectionStateListener var2) {
+
+    }
+
+    class ClientServiceStateListener implements ConnectionStateListener {
+
+        @Override
+        public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
+            Iterator iterator = stateListenerMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                ConnectionStateListener connectionStateListener = (ConnectionStateListener) entry.getValue();
+                connectionStateListener.stateChanged(curatorFramework, connectionState);
+            }
+        }
+    }
+
+
 }
