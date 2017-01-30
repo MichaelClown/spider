@@ -19,3 +19,8 @@ create /com/spider/cfg/1.0.0/common/database/driver
 
 <!-- rabbitmq队列 -->
 create /com/spider/cfg/1.0.0/logistics/queue/spider-queue-test spider.queue.test
+
+<!-- spider相关服务 -->
+create /com/spider/cfg/1.0.0/service/${host-name}
+create /com/spider/cfg/1.0.0/service/${host-name}/INNER_SERVICE
+create /com/spider/cfg/1.0.0/service/${host-name}/OUTER_SERVICE

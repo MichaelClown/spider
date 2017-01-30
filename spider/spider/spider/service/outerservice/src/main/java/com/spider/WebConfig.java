@@ -1,8 +1,10 @@
 package com.spider;
 
-import com.spider.common.zookeeper.client.ZookeeperClient;
-import com.spider.common.zookeeper.constant.NameSpaceEnum;
 import com.spider.common.amqp.constant.QueueNameEnum;
+import com.spider.common.zookeeper.client.ServiceClient;
+import com.spider.common.zookeeper.client.ZookeeperClient;
+import com.spider.common.zookeeper.config.ServiceConfig;
+import com.spider.common.zookeeper.constant.NameSpaceEnum;
 import com.spider.integrate.amqp.handler.TestMessageHandler;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -23,17 +25,31 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class WebConfig {
 
-    final String zkAddress = "192.168.1.3:2181";
+    final String zkAddress = "192.168.1.5:2181";
+    final String zkServiceNameSpace = "/com/spider/cfg/1.0.0/service";
     final String zkNameSpace = "/com/spider/cfg/1.0.0";
+    final String serviceDiscoverPath = zkServiceNameSpace + System.getProperty("com.spider.service.discover", "/spider-service");
 
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     public ZookeeperClient zookeeperClient() {
-        ZookeeperClient zookeeperClient = new ZookeeperClient(zkAddress, zkNameSpace);
+        ZookeeperClient zookeeperClient = new ZookeeperClient(zkAddress, zkNameSpace, serviceDiscoverPath);
         zookeeperClient.iterator(NameSpaceEnum.RABBITMQ.getNameSpace(), NameSpaceEnum.RABBITMQ.getZkPath());
         zookeeperClient.iterator(NameSpaceEnum.DATABASE.getNameSpace(), NameSpaceEnum.DATABASE.getZkPath());
         zookeeperClient.iterator(NameSpaceEnum.QUEUE.getNameSpace(), NameSpaceEnum.QUEUE.getZkPath());
         return zookeeperClient;
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    public ServiceClient serviceClient() {
+        ServiceConfig serviceConfig = new ServiceConfig()
+                .serviceName(ServiceConfig.ServiceNameEnum.OUTER)
+                .serviceTypeEnum(ServiceConfig.ServiceTypeNum.PROVIDER);
+        ServiceClient serviceClient = new ServiceClient(zkAddress, zkNameSpace, serviceDiscoverPath, serviceConfig);
+        serviceClient.startListener();
+        serviceClient.registService();
+        return serviceClient;
     }
 
     @Bean
@@ -75,8 +91,4 @@ public class WebConfig {
         String value = zookeeperClient().get(nameSpace, zkPath);
         return StringUtils.hasText(value) ? value : defaultValue;
     }
-
-
-
-
 }

@@ -1,5 +1,6 @@
 package com.spider.common.zookeeper.client;
 
+import com.spider.common.zookeeper.listener.ConfigPathChildrenCacheListener;
 import com.spider.common.zookeeper.manager.AbstractZookeeperFeature;
 import com.spider.common.zookeeper.manager.AbstractZookeeperFeature.IZookeeperClient;
 import org.springframework.util.CollectionUtils;
@@ -17,12 +18,14 @@ public class ZookeeperClient extends AbstractZookeeperFeature implements IZookee
 
     public final Map<String, Map<String, String>> nodeMap = new ConcurrentHashMap<>();
 
-    public ZookeeperClient(String zkAddress, String zkNameSpace) {
-        super(zkAddress, zkNameSpace);
+    public ZookeeperClient(String zkAddress, String zkNameSpace, String serviceDiscoverPath) {
+        super(zkAddress, zkNameSpace, serviceDiscoverPath);
     }
 
     @Override
     public void iterator(String domainSpace, String zkPath) {
+        ConfigPathChildrenCacheListener listener = new ConfigPathChildrenCacheListener(domainSpace, pathConfig.getZkRootPath(), this);
+        this.zookeeperManager.addPathChildrenListener(pathConfig.getFullZkPath(zkPath), listener);
         this.loanNodes(domainSpace, zkPath);
     }
 
@@ -45,7 +48,8 @@ public class ZookeeperClient extends AbstractZookeeperFeature implements IZookee
         }
     }
 
-    private void put(String domainSpace, String nodePath, String value) {
+    @Override
+    public void put(String domainSpace, String nodePath, String value) {
         Object nameSpaceMap = (Map) nodeMap.get(domainSpace);
         if (nameSpaceMap == null) {
             nameSpaceMap = new ConcurrentHashMap<>();
@@ -58,6 +62,16 @@ public class ZookeeperClient extends AbstractZookeeperFeature implements IZookee
     public String get(String domainSpace, String nodePath) {
         Map<String, String> nameSpaceMap = this.nodeMap.get(domainSpace);
         return (nameSpaceMap == null || nameSpaceMap.isEmpty()) ? null : nameSpaceMap.get(nodePath);
+    }
+
+    @Override
+    public void remove(String domainSpace, String nodePath) {
+        Object nameSpaceMap = (Map) nodeMap.get(domainSpace);
+        if (nameSpaceMap == null) {
+            nameSpaceMap = new ConcurrentHashMap<>();
+            this.nodeMap.put(domainSpace, (Map<String, String>) nameSpaceMap);
+        }
+        ((Map<String, String>) nameSpaceMap).remove(nodePath);
     }
 
 

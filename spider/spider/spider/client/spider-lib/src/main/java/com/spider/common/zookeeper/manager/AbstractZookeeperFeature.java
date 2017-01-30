@@ -1,9 +1,12 @@
 package com.spider.common.zookeeper.manager;
 
 import com.spider.common.zookeeper.config.PathConfig;
-import com.spider.common.zookeeper.constant.ServiceEnum;
+import com.spider.common.zookeeper.domain.ServiceGroup;
+import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
+import org.apache.curator.framework.state.ConnectionStateListener;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jian.Michael on 2017/1/29.
@@ -17,9 +20,9 @@ public abstract class AbstractZookeeperFeature {
 
     protected PathConfig pathConfig;
 
-    public AbstractZookeeperFeature(String zkAddress, String zkNameSpace) {
+    public AbstractZookeeperFeature(String zkAddress, String zkNameSpace, String serviceDiscoverPath) {
         this.zookeeperManager = new ZookeeperManager(zkAddress, zkNameSpace, SESSION_TIME_OUT, CONNECT_TIME_OUT);
-        pathConfig = new PathConfig(zkNameSpace);
+        pathConfig = new PathConfig(zkNameSpace, serviceDiscoverPath);
     }
 
     public interface IZookeeperManager {
@@ -43,7 +46,11 @@ public abstract class AbstractZookeeperFeature {
 
         boolean checkIfExist(String path);
 
+        void addPathChildrenListener(String var1, PathChildrenCacheListener var2);
+
         void close();
+
+        void addServiceStateListener(String var1, ConnectionStateListener var2);
     }
 
     public interface IZookeeperClient {
@@ -51,16 +58,23 @@ public abstract class AbstractZookeeperFeature {
         void iterator(String domainPath, String zkPath);
 
         String get(String domainPath, String zkPath);
+
+        void remove(String domainPath, String zkPath);
+
+        void put(String domainSpace, String nodePath, String value);
     }
 
     public interface IServiceClient {
 
         void registService();
 
-        void discoverService(ServiceEnum var1, String... var2);
+        void discoverService(boolean var1, String... var2);
 
         void startListener();
 
         boolean checkHealth(String var1);
+
+        Map<String, ServiceGroup> getServiceGroupContainer();
+
     }
 }
