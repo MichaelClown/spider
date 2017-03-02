@@ -25,7 +25,7 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class WebConfig {
 
-    final String zkAddress = "192.168.1.5:2181";
+    final String zkAddress = "182.254.131.63:2181";
     final String zkServiceNameSpace = "/com/spider/cfg/1.0.0/service";
     final String zkNameSpace = "/com/spider/cfg/1.0.0";
     final String serviceDiscoverPath = zkServiceNameSpace + System.getProperty("com.spider.service.discover", "/spider-service");

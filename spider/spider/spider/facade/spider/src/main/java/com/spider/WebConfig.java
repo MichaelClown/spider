@@ -5,15 +5,19 @@ import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.config.ServiceConfig;
 import com.spider.common.zookeeper.constant.NameSpaceEnum;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Created by jian.Michael on 2017/1/25.
  */
 @Configuration
+@EnableWebMvc
+@ComponentScan(basePackageClasses = WebConfig.class)
 public class WebConfig {
 
-    private final String zkAddress = "192.168.1.5:2181";
+    private final String zkAddress = "182.254.131.63:2181";
     private final String zkNameSpace = "/com/spider/cfg/1.0.0";
     private final String zkServiceNameSpace = "/com/spider/cfg/1.0.0/service";
     final String serviceDiscoverPath = zkServiceNameSpace + System.getProperty("com.spider.service.discover", "/spider-service");
