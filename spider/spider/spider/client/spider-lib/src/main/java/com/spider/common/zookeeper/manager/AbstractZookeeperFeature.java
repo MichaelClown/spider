@@ -1,6 +1,7 @@
 package com.spider.common.zookeeper.manager;
 
 import com.spider.common.zookeeper.config.PathConfig;
+import com.spider.common.zookeeper.domain.ServiceDetail;
 import com.spider.common.zookeeper.domain.ServiceGroup;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.framework.state.ConnectionStateListener;
@@ -75,6 +76,8 @@ public abstract class AbstractZookeeperFeature {
         boolean checkHealth(String var1);
 
         Map<String, ServiceGroup> getServiceGroupContainer();
+
+        ServiceDetail loadBalance(String serviceName);
 
     }
 }

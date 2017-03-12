@@ -36,6 +36,14 @@ public class ServiceClient extends AbstractZookeeperFeature implements IServiceC
         return this.serviceGroupContainer;
     }
 
+    @Override
+    public ServiceDetail loadBalance(String serviceName) {
+
+
+
+        return null;
+    }
+
 
     @Override
     public void registService() {
@@ -93,8 +101,8 @@ public class ServiceClient extends AbstractZookeeperFeature implements IServiceC
     }
 
     @Override
-    public boolean checkHealth(String var1) {
-        return false;
+    public boolean checkHealth(String path) {
+        return this.zookeeperManager.checkIfExist(path);
     }
 
     private void createServiceNode(String path, String serverAddress) {
