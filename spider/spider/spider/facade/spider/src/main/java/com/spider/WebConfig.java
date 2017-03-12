@@ -1,12 +1,19 @@
 package com.spider;
 
+ import com.spider.common.api.Apis;
 import com.spider.common.zookeeper.client.ServiceClient;
 import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.config.ServiceConfig;
 import com.spider.common.zookeeper.constant.NameSpaceEnum;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -39,6 +46,31 @@ public class WebConfig {
         serviceClient.startListener();
         serviceClient.discoverService(false);
         return serviceClient;
+    }
+
+    @Bean
+    public Apis apis() {
+        Apis apis = null;
+        return apis;
+    }
+
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    public ConnectionFactory connectionFactory() {
+        ZookeeperClient zkClient = zookeeperClient();
+        CachingConnectionFactory factory = new CachingConnectionFactory();
+        factory.setAddresses(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/address"));
+        factory.setPort(Integer.parseInt(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/port")));
+        factory.setVirtualHost(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/vhosts"));
+        factory.setUsername(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/username"));
+        factory.setPassword(zkClient.get(NameSpaceEnum.RABBITMQ.getNameSpace(), "/common/rabbitmq/password"));
+        return factory;
+    }
+
+    @Bean
+    public AmqpTemplate amqpTemplate() {
+        return new RabbitTemplate(connectionFactory());
     }
 
 

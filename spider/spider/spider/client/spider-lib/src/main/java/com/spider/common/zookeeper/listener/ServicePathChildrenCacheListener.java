@@ -69,7 +69,7 @@ public class ServicePathChildrenCacheListener implements PathChildrenCacheListen
         Matcher matcher = pattern.matcher(absolutePath);
         if (matcher.find()) {
             int length = matcher.end();
-            return absolutePath.substring(length+1);
+            return absolutePath.substring(length + 1);
         } else {
             return null;
         }
