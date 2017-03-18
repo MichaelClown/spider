@@ -44,7 +44,7 @@ public class SpiderHttpHeaders {
     }
 
     public void add(String name, String value) {
-        if (this.headers == null){
+        if (this.headers == null) {
             this.headers = new ArrayList<>();
         }
         this.headers.add(new SpiderHttpHeader(name, value));

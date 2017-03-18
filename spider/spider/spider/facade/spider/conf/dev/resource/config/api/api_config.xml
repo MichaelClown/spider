@@ -1,0 +1,5 @@
+<apis>
+    <api name="API_TEST_1">
+        <endpoint>![CDATA[http://www.baidu.com]]</endpoint>
+    </api>
+</apis>
