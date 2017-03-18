@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Created by jian.Michael on 2017/2/8.
  */
-public class Get extends SpiderHttpRequest{
+public class Get extends SpiderHttpRequest {
 
     public Get(String url) {
         super(url);

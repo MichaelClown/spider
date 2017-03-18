@@ -33,6 +33,14 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <resource.dir>dev</resource.dir>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -50,6 +58,12 @@
                             </excludes>
                         </overlay>
                     </overlays>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/conf/${resource.dir}/resource</directory>
+                            <targetPath>WEB-INF/classes</targetPath>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
         </plugins>

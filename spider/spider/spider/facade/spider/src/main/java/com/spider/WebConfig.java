@@ -1,7 +1,8 @@
 package com.spider;
 
  import com.spider.common.api.Apis;
-import com.spider.common.zookeeper.client.ServiceClient;
+ import com.spider.common.api.util.XmlUtil;
+ import com.spider.common.zookeeper.client.ServiceClient;
 import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.config.ServiceConfig;
 import com.spider.common.zookeeper.constant.NameSpaceEnum;
@@ -15,6 +16,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+ import org.w3c.dom.Document;
+ import org.xml.sax.SAXException;
+
+ import javax.xml.parsers.DocumentBuilderFactory;
+ import javax.xml.parsers.ParserConfigurationException;
+ import java.io.IOException;
 
 /**
  * Created by jian.Michael on 2017/1/25.
@@ -49,8 +56,14 @@ public class WebConfig {
     }
 
     @Bean
-    public Apis apis() {
+    public Apis apis() throws ParserConfigurationException, IOException, SAXException {
         Apis apis = null;
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setValidating(false);
+        builderFactory.setNamespaceAware(false);
+        Document document = builderFactory.newDocumentBuilder().parse(
+                Thread.currentThread().getContextClassLoader().getResourceAsStream("config/api/api_config.xml"));
+        apis = XmlUtil.fromXml(Apis.class, document);
         return apis;
     }
 
