@@ -11,6 +11,9 @@ public class TestMessageHandler implements MessageListener {
     @Override
     public void onMessage(Message message) {
         System.out.println(message.toString());
+    }
+
+    private void handleMessage() {
 
     }
 

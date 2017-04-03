@@ -1,7 +1,11 @@
 package com.spider;
 
  import com.spider.common.api.Apis;
+ import com.spider.common.api.client.SpiderApiClient;
+ import com.spider.common.api.client.endpoint.EndPointFactory;
+ import com.spider.common.api.client.endpoint.ServiceGroups;
  import com.spider.common.api.util.XmlUtil;
+ import com.spider.common.http.SpiderHttpClient;
  import com.spider.common.zookeeper.client.ServiceClient;
 import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.config.ServiceConfig;
@@ -56,6 +60,45 @@ public class WebConfig {
     }
 
     @Bean
+    public ServiceGroups serviceGroups() throws ParserConfigurationException, IOException, SAXException {
+        ServiceGroups serviceGroups = null;
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setValidating(false);
+        builderFactory.setNamespaceAware(false);
+        Document document = builderFactory.newDocumentBuilder().parse(
+                Thread.currentThread().getContextClassLoader().getResourceAsStream("config/endpoint/config.xml"));
+        serviceGroups = XmlUtil.fromXml(ServiceGroups.class, document);
+        return serviceGroups;
+    }
+
+    @Bean
+    public EndPointFactory endPointFactory() throws IOException, SAXException, ParserConfigurationException {
+        EndPointFactory endPointFactory = new EndPointFactory();
+        endPointFactory.setServiceClient(serviceClient());
+        endPointFactory.setServiceGroups(this.serviceGroups());
+        endPointFactory.setZookeeperClient(zookeeperClient());
+        endPointFactory.initinalize();
+        return endPointFactory;
+    }
+
+    @Bean
+    public SpiderHttpClient spiderHttpClient() {
+        return new SpiderHttpClient();
+    }
+
+    @Bean
+    public SpiderApiClient spiderApiClient() {
+        return new SpiderApiClient();
+    }
+
+    /**
+     * Api封装 Bean
+     * @return
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
+     */
+    @Bean
     public Apis apis() throws ParserConfigurationException, IOException, SAXException {
         Apis apis = null;
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -64,6 +107,7 @@ public class WebConfig {
         Document document = builderFactory.newDocumentBuilder().parse(
                 Thread.currentThread().getContextClassLoader().getResourceAsStream("config/api/api_config.xml"));
         apis = XmlUtil.fromXml(Apis.class, document);
+        apis.init();
         return apis;
     }
 
