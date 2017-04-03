@@ -15,14 +15,18 @@ import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * Created by jian.Michael on 2017/1/26.
  */
 @Configuration
+@EnableWebMvc
+@ComponentScan(basePackageClasses = WebConfig.class)
 public class WebConfig {
 
     final String zkAddress = "182.254.131.63:2181";
