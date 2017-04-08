@@ -21,7 +21,7 @@ public class SpiderHttpClient {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public static final int DEFAULT_TIME_OUT = 2000;
+    public static final int DEFAULT_TIME_OUT = 120000;
 
     private DefaultHttpClient client;
 
