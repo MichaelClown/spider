@@ -27,7 +27,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackageClasses = WebConfig.class)
-public class WebConfig {
+public class WebConfig extends DbConfig {
 
     final String zkAddress = "182.254.131.63:2181";
     final String zkServiceNameSpace = "/com/spider/cfg/1.0.0/service";

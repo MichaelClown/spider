@@ -13,25 +13,6 @@ import javax.xml.bind.Unmarshaller;
  */
 public class XmlUtil {
 
-//    public static String stringValue(Document document) {
-//        try {
-//            Document var1 = document;
-//            TransformerFactory factory = TransformerFactory.newInstance();
-//            Transformer transformer = factory.newTransformer();
-//            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-//            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-//            DOMSource domSource = new DOMSource(var1);
-//            StringWriter stringWriter = new StringWriter();
-//            StreamResult streamResult = new StreamResult(stringWriter);
-//            transformer.transform(domSource, streamResult);
-//            return stringWriter.toString();
-//        } catch (TransformerException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-
     public static <T> T fromXml(Class targetClass, Document document) {
         try {
             Unmarshaller e = JAXBContext.newInstance(targetClass).createUnmarshaller();
