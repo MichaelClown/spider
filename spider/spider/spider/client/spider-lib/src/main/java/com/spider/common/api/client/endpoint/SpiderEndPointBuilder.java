@@ -3,6 +3,7 @@ package com.spider.common.api.client.endpoint;
 import com.spider.common.api.Api;
 import com.spider.common.api.Apis;
 import com.spider.common.zookeeper.domain.ServiceDetail;
+import com.spider.common.zookeeper.elb.ElbContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -127,8 +128,7 @@ public final class SpiderEndPointBuilder<T> {
                 throw new Exception("分组[service]下不存在[" + endPointName + "]的服务");
             } else {
                 String context = endPoint.getContext();
-//                ServiceDetail serviceDetail = this.factory.getServiceClient().loadBalance(this.endPoint.name());
-                ServiceDetail serviceDetail = new ServiceDetail("http", "127.0.0.1", 8988);
+                ServiceDetail serviceDetail = this.factory.getServiceClient().loadBalance(com.spider.common.api.EndPoint.getName(this.endPoint), ElbContext.ELB.ROBIN);
                 String host = serviceDetail.getServiceIp();
                 Integer port = serviceDetail.getServicePort();
                 String url = host + ":" + port;
