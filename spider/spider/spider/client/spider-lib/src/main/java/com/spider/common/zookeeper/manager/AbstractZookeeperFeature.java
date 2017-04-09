@@ -3,6 +3,7 @@ package com.spider.common.zookeeper.manager;
 import com.spider.common.zookeeper.config.PathConfig;
 import com.spider.common.zookeeper.domain.ServiceDetail;
 import com.spider.common.zookeeper.domain.ServiceGroup;
+import com.spider.common.zookeeper.elb.ElbContext;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.apache.curator.framework.state.ConnectionStateListener;
 
@@ -77,7 +78,7 @@ public abstract class AbstractZookeeperFeature {
 
         Map<String, ServiceGroup> getServiceGroupContainer();
 
-        ServiceDetail loadBalance(String serviceName);
+        ServiceDetail loadBalance(String serviceName, ElbContext.ELB elb);
 
     }
 }

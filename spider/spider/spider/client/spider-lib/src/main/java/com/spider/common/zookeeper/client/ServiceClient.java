@@ -3,11 +3,14 @@ package com.spider.common.zookeeper.client;
 import com.spider.common.zookeeper.config.ServiceConfig;
 import com.spider.common.zookeeper.domain.ServiceDetail;
 import com.spider.common.zookeeper.domain.ServiceGroup;
+import com.spider.common.zookeeper.elb.ElbContext;
 import com.spider.common.zookeeper.listener.ServicePathChildrenCacheListener;
 import com.spider.common.zookeeper.manager.AbstractZookeeperFeature;
 import com.spider.common.zookeeper.manager.AbstractZookeeperFeature.IServiceClient;
 import com.spider.common.zookeeper.listener.service.discover.ServiceDiscoverStateListener;
 import com.spider.common.zookeeper.listener.service.register.ServiceRegistStateListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Iterator;
@@ -19,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by jian.Michael on 2017/1/29.
  */
 public class ServiceClient extends AbstractZookeeperFeature implements IServiceClient {
+
+    private final Logger logger = LoggerFactory.getLogger(ServiceClient.class);
 
     private final String serverAddress = System.getProperty("com.spider.service.address");
 
@@ -37,11 +42,14 @@ public class ServiceClient extends AbstractZookeeperFeature implements IServiceC
     }
 
     @Override
-    public ServiceDetail loadBalance(String serviceName) {
-
-
-
-        return null;
+    public ServiceDetail loadBalance(String serviceName, ElbContext.ELB elb) {
+        try {
+            ElbContext elbContext = new ElbContext(elb);
+            return elbContext.loadBalance(serviceName, serviceGroupContainer);
+        } catch (InterruptedException e) {
+            logger.error("Service[{}] load balance failed", serviceName);
+            return null;
+        }
     }
 
 
