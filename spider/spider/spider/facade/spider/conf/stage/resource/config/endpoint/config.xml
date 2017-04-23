@@ -1,0 +1,10 @@
+<endpoint-groups>
+    <group name="SERVICE">
+        <service name="OUTER">
+            <endpoint url="outerservice.spider.com" context="/outerservice"></endpoint>
+        </service>
+        <service name="INNER">
+            <endpoint url="innerservice.spider.com" context="/innerservice"></endpoint>
+        </service>
+    </group>
+</endpoint-groups>

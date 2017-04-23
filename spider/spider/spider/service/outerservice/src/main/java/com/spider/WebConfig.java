@@ -5,6 +5,8 @@ import com.spider.common.zookeeper.client.ServiceClient;
 import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.config.ServiceConfig;
 import com.spider.common.zookeeper.constant.NameSpaceEnum;
+import com.spider.integrate.amqp.handler.EcommerceMessageHandler;
+import com.spider.integrate.amqp.handler.LogisticsMessageHandler;
 import com.spider.integrate.amqp.handler.TestMessageHandler;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -75,21 +77,39 @@ public class WebConfig extends DbConfig {
     }
 
     @Bean
-    @Qualifier("testMessageListenerContainer")
-    public SimpleMessageListenerContainer testMessageListenerContainer() {
+    @Qualifier("ecommerceMessageListenerContainer")
+    public SimpleMessageListenerContainer ecommerceMessageListenerContainer() {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        String queueName = getZKValue(NameSpaceEnum.QUEUE.getNameSpace(), QueueNameEnum.TEST_QUEUE.getQueueZkPath(), QueueNameEnum.TEST_QUEUE.getDefaultQueueName());
+        String queueName = getZKValue(NameSpaceEnum.QUEUE.getNameSpace(), QueueNameEnum.ECOMMERCE_QUEUE.getQueueZkPath(), QueueNameEnum.ECOMMERCE_QUEUE.getDefaultQueueName());
         container.setConnectionFactory(connectionFactory());
         container.setQueueNames(queueName);
-        container.setMessageListener(testMessageHandler());
+        container.setMessageListener(ecommerceMessageHandler());
         container.setAcknowledgeMode(AcknowledgeMode.AUTO);
         return container;
     }
 
     @Bean
-    public TestMessageHandler testMessageHandler() {
-        return new TestMessageHandler();
+    public EcommerceMessageHandler ecommerceMessageHandler() {
+        return new EcommerceMessageHandler();
     }
+
+    @Bean
+    @Qualifier("logisticsMessageListenerContainer")
+    public SimpleMessageListenerContainer logisticsMessageListenerContainer() {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        String queueName = getZKValue(NameSpaceEnum.QUEUE.getNameSpace(), QueueNameEnum.LOGISTICS_QUEUE.getQueueZkPath(), QueueNameEnum.LOGISTICS_QUEUE.getDefaultQueueName());
+        container.setConnectionFactory(connectionFactory());
+        container.setQueueNames(queueName);
+        container.setMessageListener(logisticsMessageHandler());
+        container.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        return container;
+    }
+
+    @Bean
+    public LogisticsMessageHandler logisticsMessageHandler() {
+        return new LogisticsMessageHandler();
+    }
+
 
     private String getZKValue(String nameSpace, String zkPath, String defaultValue) {
         String value = zookeeperClient().get(nameSpace, zkPath);
