@@ -1,0 +1,13 @@
+<sql-config namespace="ecommerce">
+    <sql name="SQL_SELECT_ECOMMERCE_ORDER_COUNT">
+        <value><![CDATA[select count(1) from ecommerce_order where company_id = ? and inner_order_id = ?]]></value>
+    </sql>
+
+    <sql name="SQL_INSERT_ECOMMERCE_ORDER">
+        <value><![CDATA[insert into ecommerce_order(company_id, inner_order_id, comment, create_date, commodities) values(?, ?, ?, ?, ?)]]></value>
+    </sql>
+
+    <sql name="SQL_FIND_LAST_ID">
+        <value><![CDATA[select LAST_INSERT_ID()]]></value>
+    </sql>
+</sql-config>

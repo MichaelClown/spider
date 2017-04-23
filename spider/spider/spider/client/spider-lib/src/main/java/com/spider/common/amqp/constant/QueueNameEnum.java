@@ -5,7 +5,9 @@ package com.spider.common.amqp.constant;
  */
 public enum QueueNameEnum {
 
-    TEST_QUEUE("spider.queue.test", "/logistics/queue/spider-queue-test");
+    TEST_QUEUE("spider.queue.test", "/logistics/queue/spider-queue-test"),
+    ECOMMERCE_QUEUE("spider.queue.ecommerce", "/logistics/queue/soider-queue-ecommerce"),
+    LOGISTICS_QUEUE("spider.queue.logistics", "/logistics/queue/spider-queue-logistics");
 
     private String defaultQueueName;
     private String queueZkPath;

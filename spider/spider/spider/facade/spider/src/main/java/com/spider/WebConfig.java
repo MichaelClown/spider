@@ -33,7 +33,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackageClasses = WebConfig.class)
-public class WebConfig {
+public class WebConfig extends BaseFacadeWebConfig {
 
     private final String zkAddress = "182.254.131.63:2181";
     private final String zkNameSpace = "/com/spider/cfg/1.0.0";
