@@ -8,18 +8,22 @@ import com.spider.common.zookeeper.constant.NameSpaceEnum;
 import com.spider.integrate.amqp.handler.EcommerceMessageHandler;
 import com.spider.integrate.amqp.handler.LogisticsMessageHandler;
 import com.spider.integrate.amqp.handler.TestMessageHandler;
+import org.aopalliance.aop.Advice;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -85,6 +89,7 @@ public class WebConfig extends DbConfig {
         container.setQueueNames(queueName);
         container.setMessageListener(ecommerceMessageHandler());
         container.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        container.setAdviceChain(new Advice[]{retryOperationsInterceptor(3)});
         return container;
     }
 
@@ -102,6 +107,7 @@ public class WebConfig extends DbConfig {
         container.setQueueNames(queueName);
         container.setMessageListener(logisticsMessageHandler());
         container.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        container.setAdviceChain(new Advice[]{retryOperationsInterceptor(3)});
         return container;
     }
 
@@ -114,5 +120,12 @@ public class WebConfig extends DbConfig {
     private String getZKValue(String nameSpace, String zkPath, String defaultValue) {
         String value = zookeeperClient().get(nameSpace, zkPath);
         return StringUtils.hasText(value) ? value : defaultValue;
+    }
+
+    public RetryOperationsInterceptor retryOperationsInterceptor(Integer maxRetry) {
+        return RetryInterceptorBuilder.stateless()
+                .maxAttempts(maxRetry)
+                .recoverer(new RepublishMessageRecoverer(amqpTemplate()))
+                .build();
     }
 }

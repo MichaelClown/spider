@@ -4,10 +4,11 @@
     </sql>
 
     <sql name="SQL_INSERT_ECOMMERCE_ORDER">
-        <value><![CDATA[insert into ecommerce_order(company_id, inner_order_id, comment, create_date, commodities) values(?, ?, ?, ?, ?)]]></value>
+        <value><![CDATA[insert into ecommerce_order(company_id, inner_order_id, comment, create_date, commodities, status) values(?, ?, ?, ?, ?, ?)]]></value>
     </sql>
 
     <sql name="SQL_FIND_LAST_ID">
         <value><![CDATA[select LAST_INSERT_ID()]]></value>
     </sql>
+
 </sql-config>
