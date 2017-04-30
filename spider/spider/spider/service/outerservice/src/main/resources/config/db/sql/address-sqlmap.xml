@@ -1,0 +1,13 @@
+<sql-config namespace="address">
+    <sql name="SQL_SELECT_ADDRESS_BY_ID_FOR_UPDATE">
+        <value><![CDATA[select address_id, province, city, distinct, detail, zip_code, company, outer_id from address where outer_id = ? for update]]></value>
+    </sql>
+
+    <sql name="SQL_INSERT_ADDRESS">
+        <value><![CDATA[insert into address(province, city, district, county, town, detail, zio_code, actor_id, company, create_date, outer_id) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]]></value>
+    </sql>
+
+    <sql name="SQL_FIND_LAST_ID">
+        <value><![CDATA[select LAST_INSERT_ID()]]></value>
+    </sql>
+</sql-config>
