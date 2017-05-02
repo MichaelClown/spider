@@ -6,6 +6,7 @@ import com.spider.common.http.Get;
 import com.spider.common.http.SpiderHttpClient;
 import com.spider.common.http.SpiderHttpResponse;
 import com.spider.common.http.TextPost;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;

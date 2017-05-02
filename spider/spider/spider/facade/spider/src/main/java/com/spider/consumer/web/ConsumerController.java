@@ -1,10 +1,18 @@
 package com.spider.consumer.web;
 
 import com.spider.common.annotation.Usage;
+import com.spider.common.constant.SessionConstant;
+import com.spider.consumer.service.ConsumerService;
+import com.spider.spider.consumer.response.AddressResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jian.Michael on 2017/3/30.
@@ -14,17 +22,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/consumer")
 public class ConsumerController {
 
-    @Usage("用户管理模块")
-    @RequestMapping(value = "/management", method = RequestMethod.GET)
-    public String management() {
+    private ConsumerService consumerService;
 
-        return "";
-    }
 
     @Usage("地址列表")
     @RequestMapping(value = "/address/list", method = RequestMethod.GET)
-    public String addressList() {
-
+    public String addressList(HttpServletRequest request, Map<String, Object> map) {
+        Long customerId = (Long) request.getSession().getAttribute(SessionConstant.USER_ID);
+        List<AddressResponse> addressList = consumerService.getAddressListOfUser(customerId);
+        map.put("addressList", addressList);
         return "";
     }
 
@@ -55,4 +61,8 @@ public class ConsumerController {
         return "/consumer/myhome";
     }
 
+    @Inject
+    public void setConsumerService(ConsumerService consumerService) {
+        this.consumerService = consumerService;
+    }
 }

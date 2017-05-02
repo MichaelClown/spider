@@ -10,7 +10,7 @@ import javax.inject.Inject;
  * Created by jian.Michael on 2017/4/2.
  */
 @Repository
-public class AccountRepository {
+public class AccountWsRepository {
 
     private JDBCAccessUtil jdbcAccessUtil;
 
@@ -31,4 +31,5 @@ public class AccountRepository {
     public void setJdbcAccessUtil(JDBCAccessUtil jdbcAccessUtil) {
         this.jdbcAccessUtil = jdbcAccessUtil;
     }
+
 }
