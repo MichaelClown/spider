@@ -4,7 +4,6 @@ package com.spider;
 import com.spider.common.database.JDBCAccessUtil;
 import com.spider.common.database.SqlManager;
 import com.spider.common.database.SqlRegistry;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
@@ -48,7 +47,9 @@ public abstract class DbConfig {
     public SqlManager sqlManager() {
         SqlManager sqlManager = SqlManager.getInstance();
         SqlRegistry sqlRegistry = sqlManager.getSqlRegistry();
-        sqlRegistry.registSql("config/db/sql/actor-sqlmap.xml");
+        sqlRegistry.registSql("config/db/sql/address-sqlmap.xml");
+        sqlRegistry.registSql("config/db/sql/ecommerce-sqlmap.xml");
+        sqlRegistry.registSql("config/db/sql/logistics-sqlmap.xml");
         sqlManager.initialize();
         return sqlManager;
     }

@@ -14,33 +14,33 @@ import java.util.Map;
 /**
  * Created by jian.Michael on 2017/4/22.
  */
-public class JSTag implements TemplateDirectiveModel {
+public class CSSTag implements TemplateDirectiveModel {
 
-    public static final String TEMPLATE_JS_TAG = "<script type=\"text/javascript\" src=\"%s\"%s></script>";
+    public static final String TEMPLATE_CSS_TAG = "<link type=\"text/css\" rel=\"stylesheet\" href=\"%s\"%s/>";
 
-    private static final String TEMPLATE_JS_DIR = "http://static.spider.com/static/spider/";
+    private static final String TEMPLATE_CSS_DIR = "http://static.spider.com/static/spider/";
 
-    private static final String TEMPLATE_JS_NULL = "";
+    private static final String TEMPLATE_CSS_NULL = "";
 
     @Override
     public void execute(Environment environment, Map map, TemplateModel[] templateModels, TemplateDirectiveBody templateDirectiveBody) throws TemplateException, IOException {
-        String finalScript = this.buildJsScriptTag(map);
+        String finalScript = this.buildCssTag(map);
         Writer output = environment.getOut();
         output.write(finalScript);
     }
 
-    private String buildJsScriptTag(Map map) {
-        String srcParam = map.get("src").toString();
+    private String buildCssTag(Map map) {
+        String srcParam = map.get("href").toString();
         if (StringUtils.hasText(srcParam)) {
             StringBuilder sb = new StringBuilder();
             String[] srcs = srcParam.split(",");
             for (String src : srcs) {
-                String script = String.format(TEMPLATE_JS_TAG, TEMPLATE_JS_DIR + src, TEMPLATE_JS_NULL);
+                String script = String.format(TEMPLATE_CSS_TAG, TEMPLATE_CSS_DIR + srcParam, TEMPLATE_CSS_NULL);
                 sb.append(script).append("\n");
             }
             return sb.toString();
         } else {
-            return TEMPLATE_JS_NULL;
+            return TEMPLATE_CSS_NULL;
         }
     }
 

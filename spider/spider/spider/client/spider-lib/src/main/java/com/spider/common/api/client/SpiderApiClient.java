@@ -21,13 +21,13 @@ public final class SpiderApiClient {
 
     private SpiderHttpClient httpClient;
 
-    public <T> T get(SpiderEndPointBuilder<T> builder) throws Exception {
+    public <T> T get(SpiderEndPointBuilder<T> builder) {
         Get get = new Get(builder.getApiService());
         get.setAccept("application/json");
         return this.convertResponse(builder, httpClient.execute(get));
     }
 
-    public <T> T post(SpiderEndPointBuilder<T> builder) throws Exception {
+    public <T> T post(SpiderEndPointBuilder<T> builder) {
         TextPost post = new TextPost(builder.getApiService());
         post.setAccept("application/json");
         post.setContentType("application/json");
