@@ -1,7 +1,12 @@
 package com.spider;
 
+import com.spider.common.freemarker.tag.CSSTag;
 import com.spider.common.freemarker.tag.JSTag;
+import com.spider.common.inteceptor.SpiderLoginInterceptor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
@@ -13,9 +18,11 @@ import java.util.Properties;
 /**
  * Created by jian.Michael on 2017/4/22.
  */
-public abstract class BaseFacadeWebConfig {
+public abstract class BaseFacadeWebConfig extends WebMvcConfigurerAdapter{
 
     private static final String TAG_JS = "js";
+
+    private static final String TAG_CSS = "css";
 
     @Bean
     public FreeMarkerViewResolver freeMarkerViewResolver() {
@@ -46,6 +53,22 @@ public abstract class BaseFacadeWebConfig {
     private void addFreemarkerVariable(FreeMarkerConfigurer freeMarkerConfigurer) {
         Map<String, Object> variables = new HashMap<>();
         variables.put(TAG_JS, new JSTag());
+        variables.put(TAG_CSS, new CSSTag());
         freeMarkerConfigurer.setFreemarkerVariables(variables);
+    }
+
+    @Bean
+    public SpiderLoginInterceptor spiderLoginInterceptor() {
+        return new SpiderLoginInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(spiderLoginInterceptor()).excludePathPatterns("/account/**");
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("forward:/index");
     }
 }

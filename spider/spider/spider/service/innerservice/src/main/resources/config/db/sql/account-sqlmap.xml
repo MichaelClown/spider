@@ -1,0 +1,5 @@
+<sql-config namespace="account">
+    <sql name="SQL_SELECT_ACCOUNT_BY_CELLPHONE">
+        <value><![CDATA[select customer_id, user_name, cell_phone, create_date, type from account where cell_phone = ?]]></value>
+    </sql>
+</sql-config>

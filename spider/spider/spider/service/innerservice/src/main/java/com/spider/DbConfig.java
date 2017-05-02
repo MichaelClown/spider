@@ -1,3 +1,5 @@
+package com.spider;
+
 import com.spider.common.database.JDBCAccessUtil;
 import com.spider.common.database.SqlManager;
 import com.spider.common.database.SqlRegistry;
@@ -44,7 +46,7 @@ public abstract class DbConfig {
     public SqlManager sqlManager() {
         SqlManager sqlManager = SqlManager.getInstance();
         SqlRegistry sqlRegistry = sqlManager.getSqlRegistry();
-        sqlRegistry.registSql("config/db/sql/actor-sqlmap.xml");
+        sqlRegistry.registSql("config/db/sql/account-sqlmap.xml");
         sqlManager.initialize();
         return sqlManager;
     }

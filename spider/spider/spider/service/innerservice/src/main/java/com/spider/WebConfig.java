@@ -1,3 +1,5 @@
+package com.spider;
+
 import com.spider.common.zookeeper.client.ServiceClient;
 import com.spider.common.zookeeper.client.ZookeeperClient;
 import com.spider.common.zookeeper.config.ServiceConfig;

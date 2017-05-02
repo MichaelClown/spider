@@ -33,7 +33,7 @@ public class RobinStrategy implements LbStrategy {
             throw new RuntimeException("Service[" + path + "] is lost...");
         } else {
             ServiceGroup serviceGroup = serviceGroupMap.get(path);
-            if (serviceGroup.isEmpty()) {
+            if (serviceGroup == null || serviceGroup.isEmpty()) {
                 throw new RuntimeException("Service[" + path + "] is empty...");
             } else {
                 int length = serviceGroup.size();

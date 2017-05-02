@@ -1,5 +1,6 @@
 package com.spider.common.api.client.endpoint;
 
+import com.spider.common.SpiderBusinessException;
 import com.spider.common.api.Api;
 import com.spider.common.api.Apis;
 import com.spider.common.zookeeper.domain.ServiceDetail;
@@ -89,25 +90,25 @@ public final class SpiderEndPointBuilder<T> {
      * 获取api url地址
      * @return
      */
-    public String getApiService() throws Exception {
+    public String getApiService() {
         StringBuilder builder = new StringBuilder("http://");
         if (!StringUtils.hasText(this.action)) {
-            throw new Exception("action is null");
+            throw new SpiderBusinessException("action is null");
         } else if (null == this.endPoint) {
-            throw new Exception("endpoint is null");
+            throw new SpiderBusinessException("endpoint is null");
         } else if (null == factory) {
-            throw new Exception("factor is null");
+            throw new SpiderBusinessException("factor is null");
         } else {
             builder.append(this.getEndPoint()).append(this.action);
         }
 
         if (StringUtils.hasText(this.apiName)) {
             if (null == apis) {
-                throw new Exception("apis is null");
+                throw new SpiderBusinessException("apis is null");
             }
             Api apiObj = this.apis.getApi(this.apiName);
             if (null == apiObj) {
-                throw new Exception("api not found");
+                throw new SpiderBusinessException("api not found");
             } else {
                 builder.append(builder.indexOf("&") > 0 ? "&" : "?");
                 builder.append("api=").append(apiObj.getEndpoint());
@@ -117,15 +118,15 @@ public final class SpiderEndPointBuilder<T> {
         return builder.toString();
     }
 
-    private String getEndPoint() throws Exception {
+    private String getEndPoint() {
         Map<String, EndPoint> underGroupEndPoints = this.factory.getDefaultServiceGroups();
         if (CollectionUtils.isEmpty(underGroupEndPoints)) {
-            throw new Exception("Group[service] not exists");
+            throw new SpiderBusinessException("Group[service] not exists");
         } else {
             String endPointName = this.endPoint.name();
             EndPoint endPoint = underGroupEndPoints.get(endPointName);
             if (null == endPoint) {
-                throw new Exception("分组[service]下不存在[" + endPointName + "]的服务");
+                throw new SpiderBusinessException("分组[service]下不存在[" + endPointName + "]的服务");
             } else {
                 String context = endPoint.getContext();
                 ServiceDetail serviceDetail = this.factory.getServiceClient().loadBalance(com.spider.common.api.EndPoint.getName(this.endPoint), ElbContext.ELB.ROBIN);
