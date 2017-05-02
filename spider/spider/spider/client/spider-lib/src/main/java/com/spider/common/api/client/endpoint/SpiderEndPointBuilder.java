@@ -17,7 +17,7 @@ public final class SpiderEndPointBuilder<T> {
 
     private Class<T> targetClass;
 
-    private Class<?>[] elementClass;
+    private Class[] elementClass;
 
     private Enum endPoint;
 
@@ -49,6 +49,10 @@ public final class SpiderEndPointBuilder<T> {
     public SpiderEndPointBuilder<T> elementTypes(Class... elementClass) {
         this.elementClass = elementClass;
         return this;
+    }
+
+    public Class[] getElementClass() {
+        return elementClass;
     }
 
     public SpiderEndPointBuilder<T> action(String action) {

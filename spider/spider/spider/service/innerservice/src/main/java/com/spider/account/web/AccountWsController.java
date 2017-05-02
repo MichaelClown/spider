@@ -1,6 +1,6 @@
 package com.spider.account.web;
 
-import com.spider.account.service.AccountService;
+import com.spider.account.service.AccountWsService;
 import com.spider.spider.account.response.UserAccountResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -15,9 +15,9 @@ import javax.inject.Inject;
  * Created by jian.Michael on 2017/4/2.
  */
 @Controller
-public class AccountController {
+public class AccountWsController {
 
-    private AccountService accountService;
+    private AccountWsService accountService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -26,7 +26,7 @@ public class AccountController {
     }
 
     @Inject
-    public void setAccountService(AccountService accountService) {
+    public void setAccountService(AccountWsService accountService) {
         this.accountService = accountService;
     }
 }
