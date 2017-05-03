@@ -47,6 +47,8 @@ public abstract class DbConfig {
         SqlManager sqlManager = SqlManager.getInstance();
         SqlRegistry sqlRegistry = sqlManager.getSqlRegistry();
         sqlRegistry.registSql("config/db/sql/account-sqlmap.xml");
+        sqlRegistry.registSql("config/db/sql/consumer-sqlmap.xml");
+        sqlRegistry.registSql("config/db/sql/logistics-sqlmap.xml");
         sqlManager.initialize();
         return sqlManager;
     }

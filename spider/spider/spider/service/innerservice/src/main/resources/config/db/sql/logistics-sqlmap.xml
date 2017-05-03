@@ -1,0 +1,8 @@
+<sql-config namespace="logistics">
+    <sql name="SQL_UPDATE_LOGISTICS_ORDER_WITH_NEWSTATUS">
+        <value><![CDATA[update logistics_order t1 left join ecommerce_order t2 on t1.ecommerce_order_id = t2.id set t1.status = ? where t1.order_id = ? and t2.customer_id = ?]]></value>
+    </sql>
+    <sql name="SQL_FIND_LAST_ID">
+        <value><![CDATA[select LAST_INSERT_ID()]]></value>
+    </sql>
+</sql-config>

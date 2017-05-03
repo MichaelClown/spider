@@ -8,6 +8,10 @@ import java.util.Date;
  */
 public class AddressResponse implements Serializable {
 
+    private Long customerId;        //所属账户ID
+
+    private Long actorId;           //所属收件人ID
+
     private Long addressId;         //地址ID
 
     private String province;        //省
@@ -31,6 +35,14 @@ public class AddressResponse implements Serializable {
     private String userName;        //用户姓名
 
     private Date createDate;        //创建日期
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 
     public Long getAddressId() {
         return addressId;
@@ -126,5 +138,13 @@ public class AddressResponse implements Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Long getActorId() {
+        return actorId;
+    }
+
+    public void setActorId(Long actorId) {
+        this.actorId = actorId;
     }
 }
