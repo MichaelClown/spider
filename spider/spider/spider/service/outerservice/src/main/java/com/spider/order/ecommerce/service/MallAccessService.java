@@ -26,22 +26,25 @@ public class MallAccessService {
     @Transactional
     public void processMessage(MallOrderMessage mallOrderMessage) {
 
+        // 处理电商订单中的买家信息
+        Customer existedBuyer = processActorAccount(mallOrderMessage.getOrderDetail().getCustomer());
+
+        // 处理电商订单中的买家地址信息
+        LogisticsOrder logisticsOrder = processBuyerAddress(existedBuyer, mallOrderMessage.getOrderDetail().getAddress());
+
+
         Integer orderCount = mallAccessRepository.getCountByInnerOrderId(mallOrderMessage.getCompanyId(), mallOrderMessage.getInnerOrderId());
 
         // 处理电商订单
         if (orderCount == null || orderCount > 0) {
             LOGGER.warn("MallAccessService : already exists record with companyId {} and innerOrderId {}, ignore", mallOrderMessage.getCompanyId(), mallOrderMessage.getInnerOrderId());
             return;
-        } else if (mallAccessRepository.addEcommerceOrder(mallOrderMessage) == null) {
+        }
+        Long ecommerceOrderId = mallAccessRepository.addEcommerceOrder(mallOrderMessage, existedBuyer.getCustomerId());
+        if(ecommerceOrderId == null) {
             LOGGER.error("MallAccessService : addEcommerceOrder Failed");
             throw new SpiderBusinessException("MallAccessService : addEcommerceOrder Failed");
         }
-
-        // 处理电商订单中的买家信息
-        Customer existedBuyer = processActorAccount(mallOrderMessage.getOrderDetail().getCustomer());
-
-        // 处理电商订单中的买家地址信息
-        LogisticsOrder logisticsOrder = processBuyerAddress(existedBuyer, mallOrderMessage.getOrderDetail().getAddress());
 
         // 处理电商订单中的卖家信息
         Customer existedSeller = processActorAccount(mallOrderMessage.getOrderDetail().getSeller());
@@ -50,7 +53,7 @@ public class MallAccessService {
         logisticsOrder.setEcommerce(new Company(mallOrderMessage.getCompanyId()));
 
         // 生成基础物流订单
-        processLogisticsOrder(logisticsOrder);
+        processLogisticsOrder(logisticsOrder, ecommerceOrderId);
 
     }
 
@@ -119,10 +122,10 @@ public class MallAccessService {
     }
 
     // 处理物流订单生成待发货订单
-    private void processLogisticsOrder(LogisticsOrder logisticsOrder) {
+    private void processLogisticsOrder(LogisticsOrder logisticsOrder, Long ecommerceOrderId) {
         // 如果是待发货状态，则默认为一个新创建订单
         if (LogisticsOrderStatus.FOR_DELIVERY.name().equals(logisticsOrder.getStatus().name())) {
-            if (mallAccessRepository.addLogisticsOrder(logisticsOrder) == null) {
+            if (mallAccessRepository.addLogisticsOrder(logisticsOrder, ecommerceOrderId) == null) {
                 throw new SpiderBusinessException("Failed to add logisticsOrder");
             }
         }

@@ -19,6 +19,23 @@ public class ConsumerWsService {
         return consumerWsRepository.getAddressListOfUser(customerId);
     }
 
+    public AddressResponse getAddress(Long customerId, Long addressId) {
+        return consumerWsRepository.getAddress(customerId, addressId);
+    }
+
+    public Boolean deleteAddress(Long customerId, Long addressId) {
+        return consumerWsRepository.deleteAddress(customerId, addressId);
+    }
+
+    public AddressResponse saveAddress(AddressResponse addressResponse) {
+        if (addressResponse != null && addressResponse.getAddressId() != null) {
+            Boolean result = consumerWsRepository.updateAddress(addressResponse);
+            return result ? addressResponse : new AddressResponse();
+        } else {
+            return consumerWsRepository.insertAddress(addressResponse);
+        }
+    }
+
     @Inject
     public void setConsumerWsRepository(ConsumerWsRepository consumerWsRepository) {
         this.consumerWsRepository = consumerWsRepository;

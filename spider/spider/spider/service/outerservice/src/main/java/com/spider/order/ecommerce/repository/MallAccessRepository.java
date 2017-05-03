@@ -42,11 +42,11 @@ public class MallAccessRepository {
      * @param mallOrderMessage
      * @return
      */
-    public Integer addEcommerceOrder(MallOrderMessage mallOrderMessage) {
+    public Long addEcommerceOrder(MallOrderMessage mallOrderMessage, Long customerId) {
         try {
             String commodities = this.buildCommodityString(mallOrderMessage.getOrderDetail());
-            jdbcAccessUtil.execute("ecommerce.SQL_INSERT_ECOMMERCE_ORDER", mallOrderMessage.getCompanyId(), mallOrderMessage.getInnerOrderId(), mallOrderMessage.getComment(), new Date(mallOrderMessage.getCreateDate()), commodities, EcommerceOrderStatus.NEW);
-            return jdbcAccessUtil.queryForInt("ecommerce.SQL_FIND_LAST_ID");
+            jdbcAccessUtil.execute("ecommerce.SQL_INSERT_ECOMMERCE_ORDER", mallOrderMessage.getCompanyId(), mallOrderMessage.getInnerOrderId(), mallOrderMessage.getComment(), new Date(mallOrderMessage.getCreateDate()), commodities, EcommerceOrderStatus.NEW, customerId);
+            return jdbcAccessUtil.queryForLong("ecommerce.SQL_FIND_LAST_ID");
         } catch (Exception e) {
             LOGGER.error("MallAccessRepository : addEcommerceOrder {} Failed {}", mallOrderMessage, e);
             return null;
@@ -161,9 +161,9 @@ public class MallAccessRepository {
     }
 
     // 新建物流订单
-    public Integer addLogisticsOrder(LogisticsOrder logisticsOrder) {
+    public Integer addLogisticsOrder(LogisticsOrder logisticsOrder, Long ecommerceOrderId) {
         try {
-            jdbcAccessUtil.execute("logistics.SQL_INSERT_LOGISTICS_ORDER", logisticsOrder.getDestinationActor().getActorId(), logisticsOrder.getDestinationAddress().getAddressId(), new Date(), logisticsOrder.getEcommerce().getCompanyId(), logisticsOrder.getStatus().name());
+            jdbcAccessUtil.execute("logistics.SQL_INSERT_LOGISTICS_ORDER", logisticsOrder.getDestinationActor().getActorId(), logisticsOrder.getDestinationAddress().getAddressId(), new Date(), logisticsOrder.getEcommerce().getCompanyId(), logisticsOrder.getStatus().name(), ecommerceOrderId);
             Integer orderId = jdbcAccessUtil.queryForInt("logistics.SQL_FIND_LAST_ID");
             return orderId;
         } catch (RuntimeException re) {

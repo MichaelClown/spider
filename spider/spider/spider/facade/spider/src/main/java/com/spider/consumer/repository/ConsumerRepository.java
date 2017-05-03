@@ -1,5 +1,6 @@
 package com.spider.consumer.repository;
 
+import com.alibaba.fastjson.JSON;
 import com.spider.common.api.EndPoint;
 import com.spider.common.api.client.SpiderApiClient;
 import com.spider.common.api.client.endpoint.EndPointFactory;
@@ -22,7 +23,22 @@ public class ConsumerRepository {
 
     public List<AddressResponse> getAddressListOfUser(Long customerId) {
         return spiderApiClient.get(SpiderEndPointBuilder.create(List.class).factory(factory).endpoint(EndPoint.INNER)
-                .elementTypes(AddressResponse.class).action("/addresslist/$s").arguments(customerId.toString()));
+                .elementTypes(AddressResponse.class).action("/addresslist/%s").arguments(customerId.toString()));
+    }
+
+    public AddressResponse getAddress(Long customerId, Long addressId) {
+        return spiderApiClient.get(SpiderEndPointBuilder.create(AddressResponse.class).factory(factory)
+                .endpoint(EndPoint.INNER).action("/address/%s/consumer/%s").arguments(customerId.toString(), addressId.toString()));
+    }
+
+    public Boolean deleteAddress(Long customerId, Long addressId) {
+        return spiderApiClient.get(SpiderEndPointBuilder.create(Boolean.class).factory(factory)
+                .endpoint(EndPoint.INNER).action("/address/delete/%s/%s").arguments(customerId.toString(), addressId.toString()));
+    }
+
+    public AddressResponse saveAddress(AddressResponse addressResponse) {
+        return spiderApiClient.post(SpiderEndPointBuilder.create(AddressResponse.class).factory(factory)
+                .endpoint(EndPoint.INNER).action("/address/save").body(JSON.toJSONString(addressResponse)));
     }
 
     @Inject

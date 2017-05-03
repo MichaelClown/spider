@@ -1,6 +1,6 @@
 <sql-config namespace="logistics">
     <sql name="SQL_INSERT_LOGISTICS_ORDER">
-        <value><![CDATA[insert into logistics_order(destination_actor, destination_address, create_date, ecommerce, status) values(?, ?, ?, ?, ?, ?)]]></value>
+        <value><![CDATA[insert into logistics_order(destination_actor, destination_address, create_date, ecommerce, status, ecommerce_order_id) values(?, ?, ?, ?, ?, ?, ?)]]></value>
     </sql>
     <sql name="SQL_FIND_LAST_ID">
         <value><![CDATA[select LAST_INSERT_ID()]]></value>

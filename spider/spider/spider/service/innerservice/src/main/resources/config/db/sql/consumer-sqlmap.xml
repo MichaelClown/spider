@@ -1,5 +1,17 @@
 <sql-config namespace="consumer">
     <sql name="SQL_SELECT_ADDRESS_BY_CUSTOMERID">
-        <value><![CDATA[select t1.address_id, t1.province, t1.city, t1.district, t1.county, t1.town, t1.detail, t1.zip_code, t1.actor_id, t1.company, t1.create_date, t2.actor_id, t2.real_name, t2.cell_phone from address t1 left join actor t2 on t1.actor_id = t2.actor_id left join account t3 on t2.customer_id = t3.customer_id where t3.customer_id = ?]]></value>
+        <value><![CDATA[select t1.address_id, t1.province, t1.city, t1.district, t1.county, t1.town, t1.detail, t1.zip_code, t1.actor_id, t1.company, t1.create_date, t2.real_name, t2.cell_phone from address t1 left join actor t2 on t1.actor_id = t2.actor_id left join account t3 on t2.customer_id = t3.customer_id where t3.customer_id = ?]]></value>
+    </sql>
+    <sql name="SQL_SELECT_ADDRESS_BY_ADDRESSID">
+        <value><![CDATA[select t1.address_id, t1.province, t1.city, t1.district, t1.county, t1.town, t1.detail, t1.zip_code, t1.actor_id, t1.company, t1.create_date, t2.real_name, t2.cell_phone from address t1 left join actor t2 on t1.actor_id = t2.actor_id left join account t3 on t2.customer_id = t3.customer_id where t3.customer_id = ? and t1.address_id = ?]]></value>
+    </sql>
+    <sql name="SQL_DELETE_ADDRESS_BY_ADDRESSID">
+        <value><![CDATA[delete address from address t1 left join actor t2 on t1.actor_id = t2.actor_id left join account t3 on t2.customer_id = t3.customer_id where t3.customer_id = ? and t1.address_id = ?]]></value>
+    </sql>
+    <sql name="SQL_INSERT_ADDRESS">
+        <value><![CDATA[insert into address(province, city, district, county, town, detail, zip_code, actor_id, company, create_date) values (?,?,?,?,?,?,?,?,?,?)]]></value>
+    </sql>
+    <sql name="SQL_FIND_LAST_ID">
+        <value><![CDATA[select LAST_INSERT_ID()]]></value>
     </sql>
 </sql-config>

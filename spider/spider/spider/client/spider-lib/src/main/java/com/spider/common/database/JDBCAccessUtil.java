@@ -124,6 +124,16 @@ public class JDBCAccessUtil {
         }
     }
 
+    public Long queryForLong(String sqlConfig, Object... args) {
+        try {
+            String sql = this.splitAndGetSql(sqlConfig);
+            return jdbcTemplate.queryForObject(sql, Long.class, args);
+        } catch (Exception e) {
+            logger.error("sql with sentence {} got wrong result : {}", sqlConfig, e);
+            return null;
+        }
+    }
+
     public int execute(String sqlConfig, Object... args) {
         try {
             String sql = this.splitAndGetSql(sqlConfig);

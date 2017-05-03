@@ -2,4 +2,10 @@
     <sql name="SQL_SELECT_ACCOUNT_BY_CELLPHONE">
         <value><![CDATA[select customer_id, user_name, cell_phone, create_date, type from account where cell_phone = ?]]></value>
     </sql>
+    <sql name="SQL_INSERT_ACTOR">
+        <value><![CDATA[insert into actor(cell_phone, real_name, customer_id) values(?,?,?)]]></value>
+    </sql>
+    <sql name="SQL_FIND_LAST_ID">
+        <value><![CDATA[select LAST_INSERT_ID()]]></value>
+    </sql>
 </sql-config>
