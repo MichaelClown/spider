@@ -6,6 +6,9 @@ import com.spider.common.api.client.SpiderApiClient;
 import com.spider.common.api.client.endpoint.EndPointFactory;
 import com.spider.common.api.client.endpoint.SpiderEndPointBuilder;
 import com.spider.spider.consumer.response.AddressResponse;
+import com.spider.spider.order.OrderRecordItem;
+import com.spider.spider.order.OrderResponse;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -39,6 +42,21 @@ public class ConsumerRepository {
     public AddressResponse saveAddress(AddressResponse addressResponse) {
         return spiderApiClient.post(SpiderEndPointBuilder.create(AddressResponse.class).factory(factory)
                 .endpoint(EndPoint.INNER).action("/address/save").body(JSON.toJSONString(addressResponse)));
+    }
+
+    public List<OrderResponse> getOrderListOfUser(Long customerId) {
+        return spiderApiClient.get(SpiderEndPointBuilder.create(List.class).elementTypes(OrderResponse.class).factory(factory)
+                        .endpoint(EndPoint.INNER).action("/orderlist/%s").arguments(customerId.toString()));
+    }
+
+    public OrderResponse getOrderDetailByOrderId(Long orderId) {
+        return spiderApiClient.get(SpiderEndPointBuilder.create(OrderResponse.class).factory(factory)
+                        .endpoint(EndPoint.INNER).action("/orderdetail/%s").arguments(orderId.toString()));
+    }
+
+    public List<OrderRecordItem> getOrderRecordList(Long orderId) {
+        return spiderApiClient.get(SpiderEndPointBuilder.create(List.class).elementTypes(OrderRecordItem.class).factory(factory)
+                        .endpoint(EndPoint.INNER).action("/orderrecord/%s").arguments(orderId.toString()));
     }
 
     @Inject

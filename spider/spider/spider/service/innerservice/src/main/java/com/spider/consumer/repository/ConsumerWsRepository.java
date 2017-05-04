@@ -3,6 +3,10 @@ package com.spider.consumer.repository;
 import com.spider.common.SpiderBusinessException;
 import com.spider.common.database.JDBCAccessUtil;
 import com.spider.spider.consumer.response.AddressResponse;
+import com.spider.spider.order.Actor;
+import com.spider.spider.order.Address;
+import com.spider.spider.order.OrderRecordItem;
+import com.spider.spider.order.OrderResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.RowMapper;
@@ -125,6 +129,71 @@ public class ConsumerWsRepository {
         addressResponse.setAddressId(resultSet.getLong("address_id"));
         addressResponse.setCreateDate(resultSet.getDate("create_date"));
         return addressResponse;
+    };
+
+    public List<OrderResponse> getOrderListOfUser(Long customerId) {
+        return jdbcAccessUtil.queryForList("consumer.SQL_SELECT_ORDER_BY_CUSTOMERID", ORDERMAPPER,customerId);
+    }
+
+    private RowMapper<OrderResponse> ORDERMAPPER = (resultSet, i) -> {
+        OrderResponse orderResponse = new OrderResponse();
+        orderResponse.setLogisticsOrderStatus(resultSet.getString("status"));
+        orderResponse.setCommodities(resultSet.getString("commodities"));
+        orderResponse.setEcommerceOrderId(resultSet.getLong("id"));
+        orderResponse.setCreateDate(resultSet.getDate("create_date"));
+        return orderResponse;
+    };
+
+    public OrderResponse getOrderDetailByOrderId(Long orderId) {
+        return jdbcAccessUtil.queryForObject("logistics.SQL_SELECT_ORDER_DETAIL", ORDERDETAILMAPPER, orderId);
+    }
+
+    private RowMapper<OrderResponse> ORDERDETAILMAPPER = (resultSet, i) -> {
+        OrderResponse orderResponse = new OrderResponse();
+        orderResponse.setLogisticsOrderStatus(resultSet.getString("l_status"));
+        orderResponse.setCommerceOrderStatus(resultSet.getString("e_status"));
+        orderResponse.setCreateDate(resultSet.getDate("l_create_date"));
+        orderResponse.setComment(resultSet.getString("comment"));
+        orderResponse.setCommodities(resultSet.getString("commodities"));
+        orderResponse.setFee(resultSet.getBigDecimal("l_fee"));
+        Actor dActor = new Actor();
+        dActor.setRealName("d_actor_name");
+        dActor.setCellPhone("d_actor_cellphone");
+        orderResponse.setDestinationActor(dActor);
+        Actor oActor = new Actor();
+        oActor.setRealName("o_actor_name");
+        oActor.setCellPhone("o_actor_cellphone");
+        orderResponse.setOriginActor(oActor);
+        Address dAddress = new Address();
+        dAddress.setProvince(resultSet.getString("d_province"));
+        dAddress.setCity(resultSet.getString("d_city"));
+        dAddress.setArea(resultSet.getString("d_district"));
+        dAddress.setZipCode(resultSet.getInt("d_zip_code"));
+        dAddress.setDetail(resultSet.getString("d_detail"));
+        dAddress.setCompanyName(resultSet.getString("d_company"));
+        orderResponse.setDestinationAddress(dAddress);
+        Address oAddress = new Address();
+        oAddress.setProvince(resultSet.getString("o_province"));
+        oAddress.setCity(resultSet.getString("o_city"));
+        oAddress.setArea(resultSet.getString("o_district"));
+        oAddress.setZipCode(resultSet.getInt("o_zip_code"));
+        oAddress.setDetail(resultSet.getString("o_detail"));
+        oAddress.setCompanyName(resultSet.getString("o_company"));
+        orderResponse.setDestinationAddress(oAddress);
+        orderResponse.setEcommerceCompany(resultSet.getString("e_company"));
+        orderResponse.setLogisticsCompany("l_company");
+        return orderResponse;
+    };
+
+    public List<OrderRecordItem> getOrderRecordList(Long orderId) {
+        return jdbcAccessUtil.queryForList("logistics.SQL_SELECT_RECORD_OF_ORDER", ORDERRECORDMAPPER, orderId);
+    }
+
+    private RowMapper<OrderRecordItem> ORDERRECORDMAPPER = (resultSet, i) -> {
+        OrderRecordItem orderRecordItem = new OrderRecordItem();
+        orderRecordItem.setMessage(resultSet.getString("order_id"));
+        orderRecordItem.setRecordDate(resultSet.getDate("update_date"));
+        return orderRecordItem;
     };
 
     @Inject

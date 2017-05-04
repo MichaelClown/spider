@@ -35,7 +35,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan(basePackageClasses = WebConfig.class)
 public class WebConfig extends BaseFacadeWebConfig {
 
-    private final String zkAddress = "182.254.131.63:2181";
+    private final String zkAddress = System.getProperty("com.spider.zk.ip", "182.254.131.63:2181");
     private final String zkNameSpace = "/com/spider/cfg/1.0.0";
     private final String zkServiceNameSpace = "/com/spider/cfg/1.0.0/service";
     final String serviceDiscoverPath = zkServiceNameSpace + System.getProperty("com.spider.service.discover", "/spider-service");

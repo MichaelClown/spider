@@ -2,6 +2,8 @@ package com.spider.consumer.service;
 
 import com.spider.consumer.repository.ConsumerWsRepository;
 import com.spider.spider.consumer.response.AddressResponse;
+import com.spider.spider.order.OrderRecordItem;
+import com.spider.spider.order.OrderResponse;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -34,6 +36,18 @@ public class ConsumerWsService {
         } else {
             return consumerWsRepository.insertAddress(addressResponse);
         }
+    }
+
+    public List<OrderResponse> getOrderListOfUser(Long customerId) {
+        return consumerWsRepository.getOrderListOfUser(customerId);
+    }
+
+    public OrderResponse getOrderDetailByOrderId(Long orderId) {
+        return consumerWsRepository.getOrderDetailByOrderId(orderId);
+    }
+
+    public List<OrderRecordItem> getOrderRecordList(Long orderId) {
+        return consumerWsRepository.getOrderRecordList(orderId);
     }
 
     @Inject
