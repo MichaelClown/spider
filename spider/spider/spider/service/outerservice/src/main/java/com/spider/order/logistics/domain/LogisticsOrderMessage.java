@@ -1,5 +1,7 @@
 package com.spider.order.logistics.domain;
 
+import com.spider.spider.logistics.LogisticsOrderStatus;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,29 +15,73 @@ public class LogisticsOrderMessage {
         NEW,UPDATE,DELETE
     }
 
+    private Long orderId;
 
     private MsgType msgType;
 
-    private Long orderId;   //订单ID
+    private String from;
 
-    private Long destinationActorId;    //收件人ID
+    private String to;
 
-    private Long destinationAddressId;  //收件地址ID
+    private String detail;
 
-    private Long originActorId;     //发货人ID
+    private String status;
 
-    private Long originAddressId;   //发货人地址ID
+    private Date updateDate;    //物流单创建时间
 
-    private BigDecimal fee;     //物流费用
+    public Long getOrderId() {
+        return orderId;
+    }
 
-    private Date createDate;    //物流单创建时间
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
-    private Date endDate;       //物流单完成时间
+    public MsgType getMsgType() {
+        return msgType;
+    }
 
-    private Long eCommerceId;     //订单所属电商公司ID
+    public void setMsgType(MsgType msgType) {
+        this.msgType = msgType;
+    }
 
-    private Long logisticsId;     //订单所属物流公司ID
+    public String getFrom() {
+        return from;
+    }
 
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
+    public String getTo() {
+        return to;
+    }
 
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
 }
