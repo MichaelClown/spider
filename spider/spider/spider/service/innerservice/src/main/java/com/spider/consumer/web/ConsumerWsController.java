@@ -2,6 +2,8 @@ package com.spider.consumer.web;
 
 import com.spider.consumer.service.ConsumerWsService;
 import com.spider.spider.consumer.response.AddressResponse;
+import com.spider.spider.order.OrderRecordItem;
+import com.spider.spider.order.OrderResponse;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,9 @@ public class ConsumerWsController {
 
     private ConsumerWsService consumerWsService;
 
-    @RequestMapping(value = "/addresslist", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/addresslist/{customerId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<AddressResponse> getAddressListOfUser(String customerId) {
+    public List<AddressResponse> getAddressListOfUser(@PathVariable String customerId) {
         return consumerWsService.getAddressListOfUser(Long.parseLong(customerId));
     }
 
@@ -39,6 +41,24 @@ public class ConsumerWsController {
     @ResponseBody
     public AddressResponse saveAddress(@RequestBody AddressResponse addressResponse) {
         return consumerWsService.saveAddress(addressResponse);
+    }
+
+    @RequestMapping(value = "/orderlist/{customerId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<OrderResponse> getOrderListOfUser(@PathVariable String customerId) {
+        return consumerWsService.getOrderListOfUser(Long.parseLong(customerId));
+    }
+
+    @RequestMapping(value = "/orderdetail/{orderId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public OrderResponse getOrderDetailByOrderId(@PathVariable String orderId) {
+        return consumerWsService.getOrderDetailByOrderId(Long.parseLong(orderId));
+    }
+
+    @RequestMapping(value = "/orderrecord/{orderId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<OrderRecordItem> getOrderRecordList(@PathVariable String orderId) {
+        return consumerWsService.getOrderRecordList(Long.parseLong(orderId));
     }
 
     @Inject

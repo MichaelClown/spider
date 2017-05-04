@@ -11,6 +11,9 @@
     <sql name="SQL_INSERT_ADDRESS">
         <value><![CDATA[insert into address(province, city, district, county, town, detail, zip_code, actor_id, company, create_date) values (?,?,?,?,?,?,?,?,?,?)]]></value>
     </sql>
+    <sql name="SQL_SELECT_ORDER_BY_CUSTOMERID">
+        <value><![CDATA[select t1.status, t1.goods, t1.create_date, t2.commodities, t2.id from logistics_order t1 left join ecommerce_order t2 on t1.ecommerce_order_id = t2.id where t2.customer_id = ?]]></value>
+    </sql>
     <sql name="SQL_FIND_LAST_ID">
         <value><![CDATA[select LAST_INSERT_ID()]]></value>
     </sql>
