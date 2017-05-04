@@ -1,11 +1,16 @@
 package com.spider.integrate.amqp.handler;
 
+import com.alibaba.fastjson.JSON;
+import com.spider.order.logistics.domain.LogisticsOrderMessage;
+import com.spider.order.logistics.service.LogisticsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer;
+
+import javax.inject.Inject;
 
 /**
  * 物流订单的状态变更消息
@@ -17,6 +22,8 @@ public class LogisticsMessageHandler implements MessageListener{
 
     private static final String KEY_ACTION = "action";
 
+    private LogisticsService logisticsService;
+
     @Override
     public void onMessage(Message message) {
         MessageProperties msgProps = message.getMessageProperties();
@@ -27,10 +34,22 @@ public class LogisticsMessageHandler implements MessageListener{
         LOGGER.info("ActorHandler: action: " + (String) msgProps.getHeaders().get(KEY_ACTION)
                 + ", routeKey: " + routekey
                 + ", message body: " + new String(message.getBody()));
+        LogisticsOrderMessage logisticsOrderMessage = JSON.parseObject(new String(message.getBody()), LogisticsOrderMessage.class);
+        if (logisticsOrderMessage != null && logisticsOrderMessage.getOrderId() != null) {
+            handleMessage(logisticsOrderMessage);
+        } else {
+            LOGGER.warn("LogisticsMessageHandler : ignore message {} because of incomplete filed", logisticsOrderMessage.toString());
+        }
     }
 
-    private void handleMessage() {
-
+    private void handleMessage(LogisticsOrderMessage orderMessage) {
+        try {
+            logisticsService.processMessage(orderMessage);
+            LOGGER.info("LogisticsMessageHandler : LogisticsOrderMessage processed. " +orderMessage.toString());
+        } catch (Exception e) {
+            LOGGER.error("Exception in handler message", e);
+            throw e;
+        }
     }
 
     /**
@@ -43,4 +62,8 @@ public class LogisticsMessageHandler implements MessageListener{
 
     }
 
+    @Inject
+    public void setLogisticsService(LogisticsService logisticsService) {
+        this.logisticsService = logisticsService;
+    }
 }
